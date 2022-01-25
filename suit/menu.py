@@ -113,18 +113,19 @@ class MenuManager(object):
         """
         Make dictionary of native apps and models for easier matching
         """
-        for native_app in self.available_apps:
-            app_key = native_app['app_url'].split('/')[-2]
-            self._available_apps['apps'][app_key] = native_app
-            for native_model in native_app['models']:
-                if 'admin_url' not in native_model:
-                    # Can happen with incomplete permissions, like Delete only, etc.
-                    continue
-                model_key = '.'.join(native_model['admin_url'].split('/')[-3:-1])
-                native_model['model'] = model_key
-                self._available_apps['models'][model_key] = native_model
-                model_key2 = '.'.join([app_key, native_model['object_name'].lower()])
-                self._available_apps['models'][model_key2] = native_model
+        if self.available_apps:
+            for native_app in self.available_apps:
+                app_key = native_app['app_url'].split('/')[-2]
+                self._available_apps['apps'][app_key] = native_app
+                for native_model in native_app['models']:
+                    if 'admin_url' not in native_model:
+                        # Can happen with incomplete permissions, like Delete only, etc.
+                        continue
+                    model_key = '.'.join(native_model['admin_url'].split('/')[-3:-1])
+                    native_model['model'] = model_key
+                    self._available_apps['models'][model_key] = native_model
+                    model_key2 = '.'.join([app_key, native_model['object_name'].lower()])
+                    self._available_apps['models'][model_key2] = native_model
 
     def find_native_app(self, parent_item):
         """
